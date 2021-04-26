@@ -1,0 +1,11 @@
+node_modules/
+node_modules
+.idea/
+env_config/
+env_config
+app.config.js
+package-lock.json
+comment
+comment_template
+library
+locales
