@@ -40,8 +40,12 @@ app.use(session({
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-
 require('./routes')(app)
+
+
+app.use(function (req,res,next){
+    res.status(404).render('404')
+})
 
 exports.start = function (port) {
     app.listen(port, function () {

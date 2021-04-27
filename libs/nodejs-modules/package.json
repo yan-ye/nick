@@ -20,7 +20,12 @@
     "minimist": "^1.2.5",
     "morgan": "^1.10.0",
     "serve-favicon": "^2.5.0",
+    "string-format": "^2.0.0",
     "string_format": "0.0.6",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "qs": "^6.10.1",
+    "querystring": "^0.2.1"
   }
 }
