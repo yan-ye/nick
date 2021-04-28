@@ -3,6 +3,7 @@ $CONFIG.text_language['en'] = {
     "NAV-APP": "APPS",
     "NAV-XAPK": "XAPK",
     "NAV-NEW": "NEW {0} aaaa {1}",
+    "NAV-LOGIN": "LOGIN",
 }
 $CONFIG.text_language["en"]["template_meta"] = {
     "about.html": {

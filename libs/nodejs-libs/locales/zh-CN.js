@@ -2,7 +2,9 @@ $CONFIG.text_language['zh-CN'] = {
     "NAV-GAME": "游戏",
     "NAV-APP": "应用",
     "NAV-XAPK": "XAPK",
-    "NAV-NEW": "最新"
+    "NAV-NEW": "最新",
+    "NAV-LOGIN": "登录",
+
 }
 $CONFIG.text_language['zh-CN']["template_meta"] = {
     "about.html": {
