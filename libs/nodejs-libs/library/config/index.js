@@ -5,4 +5,6 @@ if($CONFIG.run_mode){
 }else{
     require('../env_config/' + $CONFIG.env_config)
 }
+global.$$ = require('../util/global');
+
 

@@ -2,7 +2,17 @@ $CONFIG.text_language['en'] = {
     "NAV-GAME": "GAMES",
     "NAV-APP": "APPS",
     "NAV-XAPK": "XAPK",
-    "NAV-NEW": "NEW",
+    "NAV-NEW": "NEW {0} aaaa {1}",
+}
+$CONFIG.text_language["en"]["template_meta"] = {
+    "about.html": {
+        "title": "About us",
+        "keywords": "about",
+        "description": "About Team"
+    }
+}
+$CONFIG.text_language['en']['category'] = {
+    "ART_AND_DESIGN": "Art & Design",
 }
 $CONFIG.support_template_language['en'] = 'en'
 $CONFIG.support_template_language['en-AG'] = 'en'

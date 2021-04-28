@@ -14,11 +14,11 @@ exports.index = function (req, res, next) {
     //设置用户语言
     let ll_key = 'en';
     let __hl = req.query.hl
-    if(__hl && typeof __hl === 'string' && $CONFIG.support_template_language[__hl]){
+    if (__hl && typeof __hl === 'string' && $CONFIG.support_template_language[__hl]) {
         ll_key = $CONFIG.support_template_language[__hl];
-    }else if($CONFIG.route_locales_regex.test(req.url)){
+    } else if ($CONFIG.route_locales_regex.test(req.url)) {
         let url = $CONFIG.route_locales_regex.exec(req.url)
-        if(url[1]){
+        if (url[1]) {
             ll_key = url[1].toLowerCase()
         }
     }
@@ -28,41 +28,42 @@ exports.index = function (req, res, next) {
     let locale = $CONFIG.support_template_locales[ll_key]
 
     res.locals.x_ll_test = 'test Data'
-    if(locale.ll){
+    if (locale.ll) {
         res.locals.x_ll = res.locals.$_$.x_ll = '/' + locale.ll;
         res.locals.x_ll_root = res.locals.$_$.x_ll_root = '/' + locale.ll + '/';
         res.locals.x_ll_key = res.locals.$_$.x_ll_key = locale.ll;
-    }else {
+    } else {
         res.locals.x_ll = res.locals.$_$.x_ll = '';
         res.locals.x_ll_root = res.locals.$_$.x_ll_root = '/'
         res.locals.x_ll_key = res.locals.$_$.x_ll_key = ll_key
     }
-/*
-    let locale = {
-        order: 2,
-        beta: false,
-        ll: 'cn',
-        tl: 'zh-CN',
-        hl: 'zh-CN',
-        dl: 'zh-CN',
-        "country": {
-            "code": "CN",
-            "codes": ["CN", "TW", "HK"],
-            "tending_new": 80,
-            "tending": 80,
-            "tending_search": 0.1,
-            "extend": false,
-            "flag": "cn",
-            "name": "中文(简体)"
-        },
-        "crawler": "zh-CN",
-        "crawler_short": "zh",
-        "is_crawler": false,
-        "date_format": {format: 'YYYY年MM月DD日', tz: 'Asia/Shanghai'},
-        "html_lang": ' lang="zh-CN"'
-    }
-    */
+    /*
+        let locale = {
+            order: 2,
+            beta: false,
+            ll: 'cn',
+            tl: 'zh-CN',
+            hl: 'zh-CN',
+            dl: 'zh-CN',
+            "country": {
+                "code": "CN",
+                "codes": ["CN", "TW", "HK"],
+                "tending_new": 80,
+                "tending": 80,
+                "tending_search": 0.1,
+                "extend": false,
+                "flag": "cn",
+                "name": "中文(简体)"
+            },
+            "crawler": "zh-CN",
+            "crawler_short": "zh",
+            "is_crawler": false,
+            "date_format": {format: 'YYYY年MM月DD日', tz: 'Asia/Shanghai'},
+            "html_lang": ' lang="zh-CN"'
+        }
+        */
     let tl = locale.tl;
+    //挂载一些数据到模板
     res.locals.locale_language = locale;
     res.locals.$_$.display_language = res.locals.$_$.crawler_language = locale.crawler;
     res.locals.$_$.display_language_short = locale.crawler_short;
@@ -71,11 +72,42 @@ exports.index = function (req, res, next) {
     res.locals.$_$.date_format = locale.date_format;
     res.locals.$_$.html_lang = locale.html_lang;
 
+    //浏览器接受的语言
     let acceptsLanguages = req.acceptsLanguages()
-    if(acceptsLanguages && acceptsLanguages.length > 0){
+    if (acceptsLanguages && acceptsLanguages.length > 0) {
         res.locals.$_$.sourec_language = acceptsLanguages[0]
     }
+    //多语言模板数据
+    (function (o, tl) {
+        o.$GET = o.$_$.$GET = function (key) {
+            if (arguments.length === 1) {
+                return $CONFIG.text_language[tl][key]
+            }
+            return String.prototype.format.apply(
+                $CONFIG.text_language[tl][key],
+                Array.prototype.slice.call(arguments, 1)
+            )
+        };
+        o.$GET_CATEGORY = o.$_$.$GET_CATEGORY = function (key) {
+            if (arguments.length === 1) {
+                return $CONFIG.text_language[tl]['category'][key]
+            }
+            return String.prototype.format.apply(
+                $CONFIG.text_language[tl]['category'][key],
+                Array.prototype.slice.call(arguments, 1)
+            )
+        };
+        o.$GET_META = o.$_$.$GET_META = function (key, meta_type) {
+            if (arguments.length === 1) {
+                return $CONFIG.text_language[tl]['template_meta'][key][meta_type]
+            }
+            return String.prototype.format.apply(
+                $CONFIG.text_language[tl]['template_meta'][key][meta_type],
+                Array.prototype.slice.call(arguments,2)
+            )
+        };
 
+    })(res.locals, tl)
 
     next()
 }

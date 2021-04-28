@@ -4,6 +4,17 @@ $CONFIG.text_language['zh-CN'] = {
     "NAV-XAPK": "XAPK",
     "NAV-NEW": "最新"
 }
+$CONFIG.text_language['zh-CN']["template_meta"] = {
+    "about.html": {
+        "title": "About us",
+        "keywords": "about",
+        "description": "About Team"
+    }
+}
+$CONFIG.text_language['zh-CN']['category'] = {
+    "ART_AND_DESIGN": "Art & Design",
+}
+$CONFIG.support_template_language['cn'] = 'cn'
 $CONFIG.support_template_language['zh-CN'] = 'cn'
 $CONFIG.support_template_language['zh-SG'] = 'cn'
 $CONFIG.support_template_language['zh-Hans-SG'] = 'cn'
