@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>login</title>
+    <style>
+        body {
+            background: #49ca88;
+            background-image: linear-gradient(90deg, #49ca88 0%, #a3c259 100%);
+            background-position: top right;
+            background-repeat: no-repeat;
+            background-size: contain;
+            padding-bottom: 110px;
+            background-attachment: fixed;
+            min-height: 360px !important;
+            position: relative;
+        }
+        .login-box {
+            z-index: 99;
+            padding: 30px;
+            box-shadow: 0 6px 8px rgb(0 0 0 / 20%);
+            position: relative;
+            background: #FFF;
+            width: auto;
+            max-width: 362px;
+            margin: 0 auto;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<%- include('inc/tmp_header.htm')%>
+<div class="login-box">
+    <form action="">
+        <!--<input type="text" name="account" placeholder="用户名"><br>
+        <input type="password" name="password" placeholder="账户密码"><br>
+        <button id="login">登录</button>-->
+        <div>
+            <ul class="social-ul">
+                <li><a href="javascript:void(0)" data-social="google">Google</a></li>
+                <li><a href="javascript:void(0)" data-social="qq">QQ</a></li>
+            </ul>
+        </div>
+    </form>
+</div>
+</body>
+<%- include('inc/tmp_footer.htm')%>
+<script>
+    $(document).on('click','.social-ul [data-social]', function (){
+        popup($(this).attr('data-social'))
+    })
+    function popup(social){
+        let opts = {
+            width: 700,
+            height: 520,
+            "centered": true
+        }
+        let url = '/auth/' + social
+        // window.open(url, "Connect", popupOptionsToString(popupOptionsResolveCentered(opts)));
+        window.open(url, "Connect");
+    }
+    function popupOptionsToString(options) {
+        return Object
+        .keys(options)
+        .map(function processOption(key) {
+            return key + '=' + options[key];
+        })
+        .join(',');
+    }
+    function popupOptionsResolveCentered(options) {
+        var result = options;
+        var width = window.outerWidth - options.width;
+        var height = window.outerHeight - options.height;
+
+        if (options.centered) {
+            result.left = options.left || Math.round(window.screenX + (width / 2));
+            result.top = options.top || Math.round(window.screenY + (height / 2.5));
+            delete result.centered;
+        }
+        return result;
+    }
+</script>
+</html>

@@ -1,15 +1,37 @@
-<div class="header main">
+<style>
+    .main {
+        width: 1200px;
+        height: 70px;
+        margin: 0 auto;
+    }
+    .fr {
+        float: right;
+    }
+    .fl {
+        float: left;
+    }
+    .login li {
+        list-style: none;
+        float: left;
+    }
+    .login a {
+        color: black;
+        text-decoration: none;
+        margin-left: 10px;
+    }
+</style>
+<div class="header main login">
     <div class="head">
         <div class="logo fl">
-            <a href="xxxxxx">
-                LOGO
-            </a>
+            <ul>
+                <li><a href="xxxxxx">LOGO</a></li>
+            </ul>
         </div>
         <div class="top-menu">
             <ul class="nav_menu fr">
                 <li class="nav_menu-item"><a href="javascript:void(0)"><%= $_$.$GET('NAV-GAME')%></a></li>
                 <li class="nav_menu-item"><a href="javascript:void(0)"><%= $_$.$GET('NAV-APP')%></a></li>
-                <li class="nav_menu-item"><a href="javascript:void(0)"><%= $_$.$GET('NAV-LOGIN')%></a></li>
+                <li class="nav_menu-item"><a href="/login"><%= $_$.$GET('NAV-LOGIN')%></a></li>
             </ul>
         </div>
     </div>

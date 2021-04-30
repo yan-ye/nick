@@ -20,6 +20,7 @@
     "ioredis": "^4.27.1",
     "minimist": "^1.2.5",
     "morgan": "^1.10.0",
+    "passport": "^0.4.1",
     "serve-favicon": "^2.5.0",
     "string-format": "^2.0.0",
     "string_format": "0.0.6",

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+login...
+
+</body>
+<%- include('inc/tmp_footer.htm')%>
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.0/firebase-firestore.js"></script>
+<script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyC6mbWXfvZAYdB6e3NYfhIw8WITJI1F8_g",
+        authDomain: "yanye-6f349.firebaseapp.com",
+        projectId: "yanye-6f349",
+        storageBucket: "yanye-6f349.appspot.com",
+        messagingSenderId: "525567145778",
+        appId: "1:525567145778:web:dd77765ff6cfbc8c2cc92b",
+        measurementId: "G-MD1PS41S5Z"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+
+</script>
+<script>
+    let _provider = '<%= provider%>'
+    function get_provider(_provider) {
+        if(_provider === 'google'){
+           return  new firebase.auth.GoogleAuthProvider();
+        }
+    }
+
+    if(_provider){
+        if(location.hash === '#redirecting'){
+            firebase.auth()
+            .getRedirectResult()
+            .then((result) => {
+                let token = ''
+                if (result.credential) {
+                    token = result.credential.accessToken;
+                }
+                let user = result.user;
+                if(user) {
+                    let req_data = {
+                        user: {
+                            id: user.providerData[0].uid,
+                            name: user.displayName,
+                            imageUrl: user.photoURL,
+                            email: user.email
+                        },
+                        provider: _provider,
+                        access_token: token
+                    }
+                    console.log(req_data,12121212)
+                    $.ajax({
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        type: 'POST',
+                        url: '/auth/verify',
+                        data: req_data,
+                        success: function (data) {
+                            if (data.error) {
+                                $('.logining').hide();
+                                $('.wrong').show();
+                                setTimeout(function () {
+                                    window.close();
+                                }, 5000);
+                            } else {
+                                window.opener.popupResult({user: data.user});
+                                setTimeout(function () {
+                                    window.close();
+                                }, 50);
+                            }
+                        }
+                    });
+                }else {
+                    firebase.auth().signInWithRedirect(get_provider(_provider));
+                }
+            }).catch((error) => {
+                console.log(error,'errorerrorerrorerrorerrorerrorerrorerrorerrorerror')
+            });
+        }else {
+            location.hash = 'redirecting'
+            firebase.auth().signInWithRedirect(get_provider(_provider));
+        }
+    }else {
+        console.log('firebase error')
+    }
+
+
+</script>
+</html>

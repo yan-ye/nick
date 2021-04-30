@@ -25,10 +25,9 @@ if(argv.h || argv.help){
     }
 }else {//测试使用
     const qs = require('qs')
+    var crypto = require('crypto')
     const queryString = require('querystring')
   /*  const string = 'a[b][c][d][e][f][g][h][i]=j';
     console.log(qs.parse(string,{ depth: 1 }))*/
-    let str = '{0}, you have {1} unread message{2}'
-    console.log('{0}, you have {1} unread message{2}'.format('11111', 222222, '3333333'))
-    String.prototype.format.apply(str, ['11111',22222,333333])
+    console.log(crypto.createHash('md5').update('21212121212').digest('hex'))
 }
