@@ -24,10 +24,12 @@ if(argv.h || argv.help){
             break
     }
 }else {//测试使用
-    const qs = require('qs')
+/*    const qs = require('qs')
     var crypto = require('crypto')
     const queryString = require('querystring')
-  /*  const string = 'a[b][c][d][e][f][g][h][i]=j';
-    console.log(qs.parse(string,{ depth: 1 }))*/
-    console.log(crypto.createHash('md5').update('21212121212').digest('hex'))
+  /!*  const string = 'a[b][c][d][e][f][g][h][i]=j';
+    console.log(qs.parse(string,{ depth: 1 }))*!/
+    console.log(crypto.createHash('md5').update('21212121212').digest('hex'))*/
+    let arr = [{aa:1}, {bb:2}]
+    $$.__.map(arr,$.__.pick(''))
 }

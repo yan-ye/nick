@@ -8,7 +8,12 @@
     <title>Document</title>
 </head>
 <body>
-login...
+<div class="logining">
+    loading...
+</div>
+<div class="wrong" style="display: none">
+    redirecting...
+</div>
 
 </body>
 <%- include('inc/tmp_footer.htm')%>
@@ -17,25 +22,29 @@ login...
 <script src="https://www.gstatic.com/firebasejs/8.4.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.4.0/firebase-firestore.js"></script>
 <script>
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
     var firebaseConfig = {
-        apiKey: "AIzaSyC6mbWXfvZAYdB6e3NYfhIw8WITJI1F8_g",
-        authDomain: "yanye-6f349.firebaseapp.com",
-        projectId: "yanye-6f349",
-        storageBucket: "yanye-6f349.appspot.com",
-        messagingSenderId: "525567145778",
-        appId: "1:525567145778:web:dd77765ff6cfbc8c2cc92b",
-        measurementId: "G-MD1PS41S5Z"
+        apiKey: "AIzaSyB8OgqivR7ljUjkDEV2saeFBYdBvQHBT7I",
+        authDomain: "yanye-ebc44.firebaseapp.com",
+        projectId: "yanye-ebc44",
+        storageBucket: "yanye-ebc44.appspot.com",
+        messagingSenderId: "51369500206",
+        appId: "1:51369500206:web:36f78565d62d22f35949bf",
+        measurementId: "G-W0J0BF3D6G"
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     firebase.analytics();
-
 </script>
 <script>
     let _provider = '<%= provider%>'
     function get_provider(_provider) {
         if(_provider === 'google'){
-           return  new firebase.auth.GoogleAuthProvider();
+           return new firebase.auth.GoogleAuthProvider();
+        }
+        if(_provider === 'github'){
+            return new firebase.auth.GithubAuthProvider();
         }
     }
 
@@ -60,7 +69,7 @@ login...
                         provider: _provider,
                         access_token: token
                     }
-                    console.log(req_data,12121212)
+                    console.log(req_data, '>>>>>>')
                     $.ajax({
                         xhrFields: {
                             withCredentials: true
