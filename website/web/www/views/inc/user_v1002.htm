@@ -1,0 +1,9 @@
+var $$_$$ = {
+user : <%- JSON.stringify(user)%>
+};
+
+if($$_$$.user) {
+document.getElementById('nav-user-img').setAttribute('src', $$_$$.user.avatar_url)
+}
+
+

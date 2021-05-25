@@ -75,7 +75,7 @@ exports.index = function (req, res, next) {
     //浏览器接受的语言
     let acceptsLanguages = req.acceptsLanguages()
     if (acceptsLanguages && acceptsLanguages.length > 0) {
-        res.locals.$_$.sourec_language = acceptsLanguages[0]
+        res.locals.$_$.source_language = acceptsLanguages[0]
     }
     //多语言模板数据
     (function (o, tl) {

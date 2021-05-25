@@ -86,10 +86,10 @@
                                     window.close();
                                 }, 5000);
                             } else {
-                                window.opener.popupResult({user: data.user});
                                 setTimeout(function () {
                                     window.close();
                                 }, 50);
+                                alert('登录成功')
                             }
                         }
                     });

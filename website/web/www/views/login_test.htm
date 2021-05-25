@@ -35,9 +35,6 @@
 <%- include('inc/tmp_header.htm')%>
 <div class="login-box">
     <form action="/login_test_login" method="post">
-        <!--<input type="text" name="account" placeholder="用户名"><br>
-        <input type="password" name="password" placeholder="账户密码"><br>
-        <button id="login">登录</button>-->
         <div>
             <label>Username:</label>
             <input type="text" name="username"/>
@@ -53,7 +50,7 @@
             <ul class="social-ul">
                 <li><a href="javascript:void(0)" data-social="google">Google</a></li>
                 <li><a href="javascript:void(0)" data-social="qq">QQ</a></li>
-                <li><a href="javascript:void(0)" data-social="github">Github</a></li>
+                <li><a href="/auth/github" data-social="github">Github</a></li>
             </ul>
         </div>
     </form>
@@ -61,38 +58,6 @@
 </body>
 <%- include('inc/tmp_footer.htm')%>
 <script>
-    $(document).on('click','.social-ul [data-social]', function (){
-        popup($(this).attr('data-social'))
-    })
-    function popup(social){
-        let opts = {
-            width: 700,
-            height: 520,
-            "centered": true
-        }
-        let url = '/auth/view/' + social
-        window.open(url, "Connect", popupOptionsToString(popupOptionsResolveCentered(opts)));
-        // window.open(url, "Connect");
-    }
-    function popupOptionsToString(options) {
-        return Object
-        .keys(options)
-        .map(function processOption(key) {
-            return key + '=' + options[key];
-        })
-        .join(',');
-    }
-    function popupOptionsResolveCentered(options) {
-        var result = options;
-        var width = window.outerWidth - options.width;
-        var height = window.outerHeight - options.height;
 
-        if (options.centered) {
-            result.left = options.left || Math.round(window.screenX + (width / 2));
-            result.top = options.top || Math.round(window.screenY + (height / 2.5));
-            delete result.centered;
-        }
-        return result;
-    }
 </script>
 </html>

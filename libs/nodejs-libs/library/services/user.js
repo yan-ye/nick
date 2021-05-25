@@ -1,42 +1,7 @@
-const request = require('request');
-const passport = require('passport')
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const GitHubStrategy = require('passport-github2').Strategy
-
-let _google_options = {
-    clientID: '51369500206-8islnsqgirnsgima3823f0qqb1b00m5d.apps.googleusercontent.com',
-    clientSecret: '3nZ-7iOLo1j9eXKlUGT4jA-M',
-    callbackURL: "http://192.168.9.225:1300/auth/google/callback",
-    passReqToCallback: true
-}
-const _github_options = {
-    clientID: 'dee9f46667bb47a9885c',
-    clientSecret: 'a1a4cd98b93d8e7a51681d5f79c982d51a34b06e',
-    callbackURL: "http://192.168.9.225:1300/auth/github/callback"
-}
-//持久化用户登录
-passport.serializeUser(function(user, cb) {
-    cb(null, user);
-});
-passport.deserializeUser(function(obj, cb) {
-    cb(null, obj);
-});
-const github = new GitHubStrategy(_github_options,verify);
-const google = new GoogleStrategy(_google_options,verify);
-passport.use(google).use(github);
-
-
-//网站社交平台回调
-function verify(accessToken, refreshToken, profile, done) {
-    console.log(accessToken, refreshToken, profile, done,11111)
-    process.nextTick(function (){
-        console.log(accessToken, refreshToken, profile, done,222222222222222222222)
-        return done(null, 123)
-    })
-    return done(null, 123)
-}
-
-exports.socialWebV2 = function (req, provider, params, done) {
+const {github, passport, google} = require('../services/passport')
+const user_socialModel = require('../db/user_social')
+const moment = require('moment')
+exports.socialWeb = function (req, res, next, provider, params, done) {
     if (params && params.access_token && provider) {
         switch (provider) {
             case 'google':
@@ -46,28 +11,13 @@ exports.socialWebV2 = function (req, provider, params, done) {
                 });
                 break;
             case 'github':
-                console.log('provider ===', provider)
-              /*  github.userProfile(params.access_token, function (err, userProfile) {
-                    if(!err && userProfile) {
-                        getSocialWebV2Status(getSocialWebV2Data(userProfile, params, provider), params, req, provider,done)
-                    }else {
-                        done(err,userProfile)
+                github.userProfile(params.access_token, function (err, profile) {
+                    if (!err) {
+                        getSocialWebV2Status(getSocialWebData(profile, params, provider), params, req, provider, done)
+                    } else {
+                        done('get userFile Error!', null)
                     }
-                })*/
-                passport.use('github', new GitHubStrategy({
-                        clientID: 'dee9f46667bb47a9885c',
-                        clientSecret: '587e91c01418e2a7731b843b907851ba7c8d4077',
-                        callbackURL: "http://192.168.9.225:1300/auth/github/callback"
-                    },
-                    function(accessToken, refreshToken, profile, done) {
-                        console.log(accessToken, refreshToken, profile, done)
-                    }
-                ));
-
-
-
-
-
+                })
                 break;
             default:
                 done('social Error', false);
@@ -76,65 +26,72 @@ exports.socialWebV2 = function (req, provider, params, done) {
     }
 }
 
-exports.socialWebV2Callback = function (req,res,err,user,callback) {
-    if(err) {
+
+exports.socialWebCallback = function (req, res, err, user, callback) {
+    if (err) {
         console.log('socialWebV2Callback Error')
         callback(err)
-    }else {
-        if(user){
+    } else {
+        if (user) {
             let u = user //这里要处理 成需要的数据
-            console.log(req.login)
-            req.login(u, function (e) {
-                if (e) {
-                    console.error('socialCallback', e);
-                    res.render('social_callback', {
-                        error: $CONFIG.user_auth_error.UNKNOWN_ERROR
+            if (req.isAuthenticated && req.isAuthenticated()) {
+                console.log('用户已登录!')
+            } else {
+                req.login(user, function (err) {
+                    if (err) return next(err);
+                    res.cookie('_ugt', u.guest_token, {
+                        maxAge: 22118400000
                     });
-                } else {
-                    // res.cookie('_ugt', u.guest_token, {
-                    //     domain: $CONFIG.cookie_domain,
-                    //     secure: $CONFIG.cookie_secure,
-                    //     httpOnly: true,
-                    //     maxAge: 22118400000
-                    // });
-                    console.log(u.guest_token,12121212)
-                }
-            });
-        }else {
+                    console.log('用户登录成功')
+                })
+            }
+            callback(null, 'ok')
+        } else {
             callback('UNKNOWN_ERROR')
         }
     }
 }
-exports.socialCallback = function (req,res) {
 
-}
-
-
-
-
-//获取登录状态
+//获取web登录状态
 function getSocialWebV2Status(userSocial, params, req, provider, done) {
-    if(userSocial.social_id === params.social_id) {
-        if(userSocial.social_id && userSocial.social_token && userSocial.avatar_url && userSocial.display_name && userSocial.provider){
-            if (req.isAuthenticated() && req.user && req.user.reg_type != $CONFIG.user_reg_type.GUEST) {
+    /**
+     * {   social_token: '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',
+          old_token: '',
+          email: '',
+          provider: 'github',
+          social_id: '25119861',
+          display_name: '闫野',
+          avatar_url: 'https://avatars.githubusercontent.com/u/25119861?v=4'
+      }
+     *
+     * */
+    if (userSocial.social_id === params.social_id) {
+        if (userSocial.social_id && userSocial.social_token && userSocial.avatar_url && userSocial.display_name && userSocial.provider) {
+            if (req.isAuthenticated() && req.user) {
                 //已经登录了
-                done($CONFIG.user_auth_error.IS_LOGGED_IN, false);
+                console.log('已经登录了')
+                done('IS_LOGGED_IN', false);
             } else {
-                login(req, 'SOCIAL', req.cookies._ugt, null, userSocial, done)
+                console.log('准备登陆中。。。。。')
+                login(req, 'social', req.cookies._ugt, userSocial, done);
             }
-        }else{
-            done('INCORRECT_SOCIAL_PROFILE', false)
+        } else {
+            console.error('socialWebV2.Error', params.access_token, provider, JSON.stringify(userSocial));
+            done('INCORRECT_SOCIAL_PROFILE', false);
         }
+    } else {
+        console.error('socialWebV2.Error.social_id', provider);
+        done('INCORRECT_SOCIAL_PROFILE', false);
     }
 }
 
-//获取登录所需要的数据
-function getSocialWebV2Data(userProfile,params,provider) {
+//获取web登录需要的数据
+function getSocialWebData(userProfile, params, provider) {
     let userSocial = {};
-    userSocial.social_token = params.access_token
+    userSocial.social_token = params.access_token;
     userSocial.old_token = '';
-    userSocial.emali = userProfile.email || params.email || '';
-    userSocial.provider = provider
+    userSocial.email = userProfile.email || params.email || '';
+    userSocial.provider = provider;
     switch (provider) {
         case 'github':
             userSocial.social_id = userProfile.id || params.social_id;
@@ -145,13 +102,58 @@ function getSocialWebV2Data(userProfile,params,provider) {
     return userSocial
 }
 
-//登录
-function login (req, reg_type, guest_token, userInfo, userSocial, callback) {
-    switch (reg_type){
-        case 'SOCIAL':
-            callback(null, userSocial)
+//login
+const login = exports.login = function (req, req_type, guest_token, userSocial, done) {
+    switch (req_type) {
+        case 'social':
+            loginBySocial(req, guest_token, userSocial, done)
             break;
+
     }
 }
+
+//社交平台登录
+const loginBySocial = async function (req, guest_token, userSocial, done) {
+    if (!guest_token) {
+        /**
+         *  social_id: {type: String, required: true},//ID
+         email:String,//email
+         display_name: String,//名称
+         provider: String,//名称
+         avatar_url: String,//图标文件ID
+         *
+         * */
+        /* let m = new user_socialModel.modle;
+         m.social_id = userSocial.social_id;
+         m.email = userSocial.email;
+         m.display_name = userSocial.display_name;
+         m.provider = userSocial.provider;
+         m.avatar_url = userSocial.avatar_url;*/
+        let where = {
+            social_id: userSocial.social_id
+        }
+        let _user = await user_socialModel.find(where, null, {}, 1)
+        if (_user.length) {
+            userSocial.update_date = moment().format()
+            await user_socialModel.updateOne(_user[0]._id, userSocial)
+            console.log('更新成功')
+        } else {
+            await user_socialModel.create({
+                social_id: userSocial.social_id,
+                email: userSocial.email,
+                display_name: userSocial.display_name,
+                provider: userSocial.provider,
+                avatar_url: userSocial.avatar_url
+            })
+            console.log('保存成功')
+        }
+        done(null, userSocial);
+    }else {
+        console.log('e......')
+    }
+
+}
+
+
 
 

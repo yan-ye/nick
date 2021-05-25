@@ -10,10 +10,18 @@ const crypto = require('crypto')
 const favicon = require('serve-favicon')
 const redisModel = require('../nodejs-libs/library/db/redis')
 let RedisStore = require('connect-redis')(session)
+const passport = require('passport')
+const cors = require('express-cors');
 //输出日志
 if($CONFIG.morgan_log){
     app.use(morgan('short'))
 }
+app.use(cors({
+    allowedOrigins: [
+        'github.com',
+        '*'
+    ]
+}));
 app.engine('.htm', require('ejs').renderFile) // 用来把 ****特定的模板**** 生成 ****html文件**** 在render的时候调用，来处理模板文件，发送给用户
 app.set('views', [path.join(__dirname, 'views')])  //模板文件所在目录
 app.set('view engine', '.htm')//要使用的模板引擎 模板engine使用的适配的后缀名
@@ -36,6 +44,8 @@ app.use(session({
         client: redisModel.redis
     })
 }))
+
+
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))

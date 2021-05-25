@@ -32,9 +32,16 @@ exports.loadLang = function () {
     if($CONFIG.template_locales.length > 0){
         $CONFIG.template_locales.sort((a,b) => (a.order > b.order ? 1 : -1))
     }
+     // $CONFIG.template_language
+    /**
+     * $CONFIG.template_language [ 'en', 'cn',... ]
+     * $CONFIG.template_locales [{},{},...]
+     * $CONFIG.text_language = { en: {},cn: {}}
+     * */
     // $CONFIG.route_locales_regex = new RegExp('^\/(' + lls.join('|') + ')(\/|$)', 'i');
     $CONFIG.route_locales_regex =  new RegExp(`^\/(${lls.join('|')})(\/|$)`,'i');
     console.log('init template language ->');
     console.log('init template locales ->');
     console.log('init route locales regex ->', $CONFIG.route_locales_regex);
 }
+

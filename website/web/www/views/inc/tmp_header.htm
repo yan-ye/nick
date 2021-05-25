@@ -20,6 +20,7 @@
         margin-left: 10px;
     }
 </style>
+
 <div class="header main login">
     <div class="head">
         <div class="logo fl">
@@ -32,6 +33,13 @@
                 <li class="nav_menu-item"><a href="javascript:void(0)"><%= $_$.$GET('NAV-GAME')%></a></li>
                 <li class="nav_menu-item"><a href="javascript:void(0)"><%= $_$.$GET('NAV-APP')%></a></li>
                 <li class="nav_menu-item"><a href="/login"><%= $_$.$GET('NAV-LOGIN')%></a></li>
+                <li class="nav_menu-item on" id="nav-user" >
+                    <a class="nav-l" id="nav-user-a" rel="nofollow" data-href="<%-x_ll%>/login" href="javascript:void(0)">
+                        <img width="30" height="30" class="nav-user-img" id="nav-user-img"
+                             data-src="/imgs/no_login_v1.png"
+                             src="/imgs/no_login_v1.png">
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

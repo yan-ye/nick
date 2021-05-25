@@ -30,6 +30,13 @@ if(argv.h || argv.help){
   /!*  const string = 'a[b][c][d][e][f][g][h][i]=j';
     console.log(qs.parse(string,{ depth: 1 }))*!/
     console.log(crypto.createHash('md5').update('21212121212').digest('hex'))*/
-    let arr = [{aa:1}, {bb:2}]
-    $$.__.map(arr,$.__.pick(''))
+    /*let arr = [{aa:1}, {bb:2}]
+    $$.__.map(arr,$.__.pick(''))*/
+    let test_str = "{0}, you have {1} unread message{2}"
+    console.log(test_str.format('111','222','33333'))
+    function tt(cc) {
+        console.log(cc,Array.prototype.slice.call(arguments,1),1121212)
+    }
+    tt('PPPPPP',2,3,4,5)
+
 }
