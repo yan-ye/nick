@@ -6,6 +6,9 @@ const os = require('os');
 const localeService = require('../../libs/nodejs-libs/library/services/locale')
 if(argv.h || argv.help){
     console.log('help ....')
+    console.log('base...')
+    console.log('redis -p 6378')
+    console.log('mongodb -v3.6.11 -p 27018')
 }else if(argv.hasOwnProperty('start')){
     let port = argv.port || 8080
     $CONFIG.web_port = port;
@@ -38,5 +41,9 @@ if(argv.h || argv.help){
         console.log(cc,Array.prototype.slice.call(arguments,1),1121212)
     }
     tt('PPPPPP',2,3,4,5)
+    let redisClient = require('../../libs/nodejs-libs/library/db/redis').redis
+   redisClient.incrby('SIV001', 1, (err, ret) =>{
+       console.log(err,ret,111111)
+   })
 
 }

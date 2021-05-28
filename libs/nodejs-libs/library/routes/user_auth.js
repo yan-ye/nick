@@ -23,7 +23,6 @@ module.exports = function (app) {
             }else{
                 next()
             }
-
         })
     }
     app.post('/auth/verify', function (req, res, next) {

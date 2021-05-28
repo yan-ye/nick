@@ -72,7 +72,7 @@ function getSocialWebV2Status(userSocial, params, req, provider, done) {
                 console.log('已经登录了')
                 done('IS_LOGGED_IN', false);
             } else {
-                console.log('准备登陆中。。。。。')
+                console.log('准备登陆中。。。。。','req.cookies._ugt', req.cookies._ugt)
                 login(req, 'social', req.cookies._ugt, userSocial, done);
             }
         } else {
